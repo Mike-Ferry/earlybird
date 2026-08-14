@@ -122,34 +122,6 @@
       letter-spacing: 0;
     }
     .top-actions { display: flex; align-items: center; gap: 14px; }
-    .test-reset {
-      min-height: 36px;
-      padding: 7px 12px;
-      color: var(--white);
-      background: transparent;
-      border: 1px solid #68686c;
-      border-radius: 0;
-      font-size: .64rem;
-      font-weight: 800;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-    .test-reset:hover { border-color: var(--white); background: #242426; }
-    .test-reset:focus-visible { outline: 3px solid var(--white); outline-offset: 3px; }
-    .floating-test-reset {
-      position: fixed;
-      z-index: 250;
-      top: 10px;
-      right: 10px;
-      min-height: 38px;
-      color: var(--white);
-      background: rgba(11,11,12,.94);
-      border-color: rgba(255,255,255,.72);
-      box-shadow: 0 8px 22px rgba(0,0,0,.24);
-      backdrop-filter: blur(5px);
-    }
-
     .experience {
       position: relative;
       isolation: isolate;
@@ -557,7 +529,14 @@
       box-shadow: 0 24px 70px rgba(0,0,0,.32);
       animation: result-in .7s cubic-bezier(.2,.85,.2,1) both;
     }
-    .result-section.gold { border-color: var(--gold); background: radial-gradient(circle at 50% 0, rgba(233,174,47,.25), transparent 35%), var(--black); }
+    .result-section.gold {
+      border-color: var(--gold);
+      background:
+        radial-gradient(circle at 50% 0, rgba(255,217,118,.3), transparent 34%),
+        linear-gradient(145deg, rgba(233,174,47,.11), transparent 45%),
+        var(--black);
+      box-shadow: 0 20px 58px rgba(233,174,47,.28);
+    }
     .result-brand {
       width: min(560px, 100%);
       margin: 0 auto 25px;
@@ -573,10 +552,24 @@
     .result-event-details strong { color: var(--red); font-size: .82rem; letter-spacing: .045em; }
     .gold .result-event-details strong { color: #986715; }
     .result-eyebrow { margin: 0 0 10px; color: #e0dfe0; font-size: .72rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
-    .gold .result-eyebrow { color: var(--gold-light); }
+    .gold .result-eyebrow {
+      align-self: center;
+      padding: 5px 12px;
+      color: var(--black);
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+      border: 1px solid #ffe29b;
+      box-shadow: 0 0 18px rgba(255,217,118,.38);
+      animation: golden-badge-flash 1.4s ease-in-out infinite;
+    }
     .result-title { font-size: clamp(3.4rem, 13vw, 7rem); }
     .result-title .red { color: var(--red); }
     .gold .result-title { color: var(--gold-light); text-shadow: 0 0 28px rgba(233,174,47,.25); }
+    .gold .result-title,
+    .gold .result-title .red {
+      color: var(--gold-light);
+      text-shadow: 0 0 16px rgba(255,217,118,.55), 0 0 34px rgba(233,174,47,.28);
+      animation: golden-title-flash 1.4s ease-in-out infinite;
+    }
     .result-copy { max-width: 640px; margin: 17px auto 0; color: #d1cfd1; font-size: clamp(.95rem, 2.7vw, 1.08rem); }
     .value-grid { display: grid; gap: 10px; margin: 25px auto 0; max-width: 720px; text-align: left; }
     .value-item { position: relative; padding: 12px 13px 12px 42px; color: #e7e5e6; background: #1d1d20; border: 1px solid #313135; font-size: .86rem; line-height: 1.35; }
@@ -601,6 +594,14 @@
     }
     .cta:hover { background: #dd1233; transform: translateY(-2px); box-shadow: 0 16px 30px rgba(200,16,46,.38); }
     .cta:focus-visible { outline: 3px solid var(--white); outline-offset: 4px; }
+    .gold .cta {
+      color: var(--black);
+      background: linear-gradient(90deg, #d99b21, var(--gold-light), #d99b21);
+      border-color: var(--gold-light);
+      box-shadow: 0 0 20px rgba(255,217,118,.42), 0 12px 28px rgba(233,174,47,.3);
+      animation: golden-cta-flash 1.4s ease-in-out infinite;
+    }
+    .gold .cta:hover { color: var(--black); background: linear-gradient(90deg, var(--gold), #fff0bb, var(--gold)); }
     .deadline { margin: 14px auto 0; color: #aaa7aa; font-size: .75rem; }
     .result-eligibility {
       margin: 23px auto -12px;
@@ -657,6 +658,18 @@
     @keyframes carry-worm { 0%,43% { opacity: 0; transform: rotate(0); } 48% { opacity: 1; transform: rotate(-8deg); } 63% { opacity: 1; transform: rotate(9deg); } 90% { opacity: 1; transform: rotate(-5deg); } 100% { opacity: 0; transform: rotate(0); } }
     @keyframes result-in { from { opacity: 0; transform: translateY(32px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
     @keyframes fall { to { transform: translate3d(var(--drift), 110vh, 0) rotate(840deg); opacity: .9; } }
+    @keyframes golden-title-flash {
+      0%, 100% { filter: brightness(.96); text-shadow: 0 0 12px rgba(255,217,118,.42), 0 0 26px rgba(233,174,47,.2); }
+      50% { filter: brightness(1.24); text-shadow: 0 0 22px rgba(255,239,184,.9), 0 0 46px rgba(233,174,47,.58); }
+    }
+    @keyframes golden-badge-flash {
+      0%, 100% { filter: brightness(.98); box-shadow: 0 0 12px rgba(255,217,118,.3); }
+      50% { filter: brightness(1.18); box-shadow: 0 0 26px rgba(255,217,118,.72); }
+    }
+    @keyframes golden-cta-flash {
+      0%, 100% { filter: brightness(.96); box-shadow: 0 0 14px rgba(255,217,118,.3), 0 12px 26px rgba(233,174,47,.24); }
+      50% { filter: brightness(1.18); box-shadow: 0 0 30px rgba(255,217,118,.72), 0 14px 32px rgba(233,174,47,.42); }
+    }
 
     @media (min-width: 720px) {
       .topbar { min-height: 78px; }
@@ -722,7 +735,6 @@
       .top-actions { gap: 8px; }
       .campaign-tag { max-width: 154px; white-space: normal; text-align: right; font-size: .58rem; letter-spacing: .09em; line-height: 1.2; }
       .campaign-tag::before { width: 18px; height: 18px; flex: 0 0 auto; }
-      .test-reset { min-height: 34px; padding: 6px 9px; font-size: .56rem; letter-spacing: .07em; }
       .experience { min-height: 980px; }
       .content { padding: 44px 14px 310px; }
       .content::before {
@@ -757,7 +769,6 @@
       .top-actions { gap: 7px; }
       .campaign-tag { max-width: 96px; white-space: normal; text-align: right; font-size: .52rem; letter-spacing: .1em; line-height: 1.2; }
       .campaign-tag::before { display: none; }
-      .test-reset { min-height: 34px; padding: 6px 8px; font-size: .54rem; letter-spacing: .06em; }
       .experience { min-height: 1000px; }
       .content { padding-top: 48px; }
       .event-logo-wrap { width: min(220px, 72vw); margin-bottom: 16px; padding: 7px 11px; }
@@ -1059,8 +1070,6 @@
         <div class="campaign-tag">Valid on new tickets only</div>
       </div>
     </header>
-    <button class="test-reset floating-test-reset" id="test-reset-button" type="button" hidden aria-label="Reset the test and choose another worm">↻ Reset test</button>
-
     <main id="main">
       <section class="experience" id="experience" aria-labelledby="page-title">
         <div class="sun-lines" aria-hidden="true"></div>
@@ -1142,11 +1151,11 @@
         <details>
           <summary>Eligibility and terms</summary>
           <ul>
-            <li>Maximum tickets per person: <span class="placeholder">[FINAL REVIEW REQUIRED]</span></li>
-            <li>Eligibility restrictions: <span class="placeholder">[FINAL REVIEW REQUIRED]</span></li>
-            <li>Promotion deadline: <span class="placeholder">[FINAL REVIEW REQUIRED — must match configured end date]</span></li>
-            <li>Complimentary-ticket redemption terms: <span class="placeholder">[FINAL REVIEW REQUIRED]</span></li>
-            <li>Event refund and transfer rules: <span class="placeholder">[FINAL REVIEW REQUIRED]</span></li>
+            <li>Maximum tickets per person: One (1) Early Bird ticket per person. This promotional price reveal may not be repeated to attempt a different outcome.</li>
+            <li>Eligibility restrictions: This offer is valid on new ticket purchases only. Guests who have already purchased a ticket to the East Coast Finish Strong Superstar Retreat are not eligible for this promotion.</li>
+            <li>Promotion deadline: This offer is available now through Monday, August 17, 2026 at 8:00 AM PT. Your individually revealed ticket price is also only valid for the duration of this visit — if you navigate away from or close this page before completing checkout, the offer expires and is not guaranteed to be honored if you return.</li>
+            <li>Promotional $1-ticket redemption terms: The $1 ticket price is a limited, randomly awarded outcome and must be redeemed by completing checkout during this same visit and before the promotion deadline above. It cannot be combined with any other discount, upgrade, or offer.</li>
+            <li>Event refund and transfer rules: All Early Bird ticket purchases ($1, $100, and $200) are final. No refunds, cancellations, or transfers are permitted. Existing purchases are not eligible for price adjustments or refunds under this promotion.</li>
           </ul>
         </details>
       </aside>
@@ -1161,26 +1170,25 @@
   <script>
     /* ================================================================
        CAMPAIGN CONFIGURATION — FINALIZE EVERY [REPLACE BEFORE LAUNCH]
-       FORCE_OUTCOME accepts 100, 200, or "complimentary" for testing.
+       FORCE_OUTCOME accepts 1, 100, or 200 for testing.
        IMPORTANT: SET FORCE_OUTCOME BACK TO null BEFORE LAUNCH.
        ================================================================ */
-    const CAMPAIGN_ID = "mfo-early-bird-final-weekend-2026-08-v2";
+    const CAMPAIGN_ID = "mfo-early-bird-final-weekend-2026-08-v3-dollar-one";
     const EVENT_NAME = "East Coast Finish Strong Superstar Retreat";
     const EVENT_LOCATION = "The Diplomat Beach Resort • Hollywood, FL";
     const EVENT_DATES = "September 15–18, 2026";
     const PROMOTION_START = "2026-08-14T00:00:00-07:00"; // [REPLACE BEFORE LAUNCH]
-    const PROMOTION_END = "2026-08-17T23:59:59-07:00";   // [REPLACE BEFORE LAUNCH]
+    const PROMOTION_END = "2026-08-17T08:00:00-07:00";   // [REPLACE BEFORE LAUNCH]
     const TIME_ZONE = "America/Los_Angeles";
-    const CHECKOUT_URL_100 = "https://example.com/replace-100-checkout"; // [REPLACE BEFORE LAUNCH]
-    const CHECKOUT_URL_200 = "https://example.com/replace-200-checkout"; // [REPLACE BEFORE LAUNCH]
-    const CLAIM_URL_COMPLIMENTARY = "https://example.com/replace-complimentary-claim"; // [REPLACE BEFORE LAUNCH]
+    const CHECKOUT_URL_100 = "https://bit.ly/4gi0q0R";
+    const CHECKOUT_URL_200 = "https://bit.ly/3UzdRlH";
+    const CHECKOUT_URL_1 = "https://bit.ly/3Sbphv9";
     const STANDARD_EVENT_URL = "https://www.mikeferry.com/event/east-coast-superstar-retreat/";
-    const WEIGHT_100 = 75;
-    const WEIGHT_200 = 23.5;
-    const WEIGHT_COMPLIMENTARY = 1.5;
+    const WEIGHT_100 = 70;
+    const WEIGHT_200 = 28.5;
+    const WEIGHT_1 = 1.5;
     const PREVIEW_MODE = false;
-    const FORCE_OUTCOME = null; // TEST ONLY: 100, 200, or "complimentary". MUST BE null FOR LAUNCH.
-    const SHOW_TEST_RESET_BUTTON = true; // TESTING ONLY: SET TO false BEFORE LAUNCH.
+    const FORCE_OUTCOME = null; // TEMPORARY $1 TEST. MUST BE null FOR LAUNCH.
 
     const STORAGE_KEY = `mfo-outcome:${CAMPAIGN_ID}`;
     const activeState = document.getElementById("active-state");
@@ -1212,12 +1220,12 @@
         url: CHECKOUT_URL_200,
         gold: false
       },
-      "complimentary": {
-        eyebrow: "YOU FOUND THE GOLDEN WORM",
-        title: "YOUR TICKET IS ON US",
-        copy: "You found the rare Golden Worm and received one complimentary ticket. Claim it now and get ready to join us.",
-        cta: "AGREE & CLAIM MY FREE TICKET →",
-        url: CLAIM_URL_COMPLIMENTARY,
+      "1": {
+        eyebrow: "YES — YOUR TICKET IS ONLY $1!",
+        title: "YOUR TICKET IS <span class=\"red\">$1</span>",
+        copy: "You found the rare Golden Worm — and yes, your ticket is really only $1. Complete checkout now and get ready to join us.",
+        cta: "AGREE & CLAIM MY $1 TICKET →",
+        url: CHECKOUT_URL_1,
         gold: true
       }
     };
@@ -1231,15 +1239,15 @@
     /*
       Static campaign implementation. Replace only this isolated function with
       a server request if MFO needs tamper resistance, cross-device attempt
-      limits, or exact controlled inventory for complimentary tickets.
+      limits, or exact controlled inventory for rare $1 tickets.
     */
     async function requestOutcome() {
-      if ([100, 200, "complimentary"].includes(FORCE_OUTCOME)) return String(FORCE_OUTCOME);
+      if ([1, 100, 200].includes(FORCE_OUTCOME)) return String(FORCE_OUTCOME);
 
       const weights = [
         { outcome: "100", weight: WEIGHT_100 },
         { outcome: "200", weight: WEIGHT_200 },
-        { outcome: "complimentary", weight: WEIGHT_COMPLIMENTARY }
+        { outcome: "1", weight: WEIGHT_1 }
       ];
       const totalWeight = weights.reduce((sum, item) => sum + item.weight, 0);
       if (!(totalWeight > 0)) throw new Error("Campaign outcome weights must total more than zero.");
@@ -1388,14 +1396,6 @@
         image.src = eventLogoSrc;
         image.alt = EVENT_NAME;
       });
-      const testResetButton = document.getElementById("test-reset-button");
-      if (SHOW_TEST_RESET_BUTTON && testResetButton) {
-        testResetButton.hidden = false;
-        testResetButton.addEventListener("click", () => {
-          localStorage.removeItem(STORAGE_KEY);
-          location.reload();
-        });
-      }
       document.getElementById("standard-event-link").href = STANDARD_EVENT_URL;
       const state = campaignState();
       if (state === "prelaunch") {
