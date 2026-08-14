@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Secure Payment &mdash; The Mike Ferry Organization</title>
+<style>
+  :root { --bg: #ffffff; --ink: #1b1b1f; --muted: #6b6b76; }
+
+  * { box-sizing: border-box; }
+
+  html { background: var(--bg); }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* margin:auto (not justify-content:center) so tall content still scrolls
+     instead of getting clipped off the top of the viewport. */
+  .wrap {
+    width: 100%;
+    max-width: 1280px;
+    margin: auto;
+    padding: 24px 16px;
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 12px 8px; }
+  }
+
+  /* HubSpot's embed script injects an iframe here and drives its height
+     over postMessage — so no fixed height, no overflow:hidden. */
+  .payments-iframe-container { width: 100%; }
+  .payments-iframe-container iframe {
+    width: 100% !important;
+    border: 0;
+    display: block;
+  }
+
+  /* Overlay states. The embed container stays in normal flow underneath so
+     HubSpot's script always measures a correctly laid-out element. */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 24px;
+    text-align: center;
+    background: var(--bg);
+    transition: opacity .3s ease;
+  }
+  .overlay[hidden] { display: none; }
+  .overlay.fade-out { opacity: 0; }
+
+  .spinner {
+    width: 34px;
+    height: 34px;
+    border: 3px solid rgba(0,0,0,.12);
+    border-top-color: rgba(0,0,0,.55);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2s; } }
+
+  .overlay p {
+    margin: 0;
+    max-width: 36ch;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .overlay h1 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+  .overlay a { color: inherit; }
+</style>
+</head>
+<body>
+
+  <!-- Shown until HubSpot's script injects the payment iframe -->
+  <div class="overlay" id="loading">
+    <div class="spinner" role="status" aria-label="Loading secure payment form"></div>
+    <p>Loading secure payment form&hellip;</p>
+  </div>
+
+  <!-- Shown only if the embed never appears -->
+  <div class="overlay" id="error" hidden>
+    <h1>We couldn&rsquo;t load the payment form</h1>
+    <!-- TODO(Nate): swap in the correct office phone number in both places below. -->
+    <p>
+      Please refresh this page. If it still doesn&rsquo;t appear, contact our office
+      at <a href="tel:+10000000000">(000) 000-0000</a> and we&rsquo;ll take your
+      payment directly.
+    </p>
+  </div>
+
+  <main class="wrap">
+    <!-- Start of Payments Embed Script -->
+    <div class="payments-iframe-container" data-src="https://mikeferry-45810950.hs-sites.com/hs/payments/vkXQJjrdMmGXKhQ?referrer=PAYMENT_LINK_EMBED&amp;layout=embed-full"></div>
+    <script type="text/javascript" src="https://static.hsappstatic.net/payments-embed/ex/PaymentsEmbedCode.js" onerror="window.__hsEmbedFailed && window.__hsEmbedFailed()"></script>
+    <!-- End of Payments Embed Script -->
+  </main>
+
+<script>
+(function () {
+  var loading   = document.getElementById('loading');
+  var error     = document.getElementById('error');
+  var container = document.querySelector('.payments-iframe-container');
+  var settled   = false;
+  var timer;
+
+  function reveal() {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+    if (observer) observer.disconnect();
+    loading.classList.add('fade-out');
+    setTimeout(function () { loading.hidden = true; }, 320);
+  }
+
+  function fail() {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+    if (observer) observer.disconnect();
+    loading.hidden = true;
+    error.hidden = false;
+  }
+
+  // Exposed so the script tag's onerror can reach it.
+  window.__hsEmbedFailed = fail;
+
+  // HubSpot's loader injects the iframe asynchronously — watch for it rather
+  // than listening for a load event on an element that doesn't exist yet.
+  var observer = null;
+  if (container && window.MutationObserver) {
+    observer = new MutationObserver(function () {
+      var frame = container.querySelector('iframe');
+      if (!frame) return;
+      if (frame.dataset.hsBound) return;
+      frame.dataset.hsBound = '1';
+      // Give the frame its own chance to finish loading before we uncover it.
+      frame.addEventListener('load', reveal);
+      frame.addEventListener('error', fail);
+      // Safety net: if the iframe exists but never fires load, uncover anyway.
+      setTimeout(reveal, 4000);
+    });
+    observer.observe(container, { childList: true, subtree: true });
+  } else {
+    // No MutationObserver (very old browser) — just uncover after a beat.
+    setTimeout(reveal, 4000);
+  }
+
+  // If nothing has shown up in 15s, treat it as a failure.
+  timer = setTimeout(fail, 15000);
+})();
+</script>
+
+</body>
+</html>
